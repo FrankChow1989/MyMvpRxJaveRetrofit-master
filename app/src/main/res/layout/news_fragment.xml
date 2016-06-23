@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.SwipeRefreshLayout android:id="@+id/swipe_refreshlayout"
+                                              xmlns:android="http://schemas.android.com/apk/res/android"
+                                              android:layout_width="match_parent"
+                                              android:layout_height="match_parent"
+                                              android:orientation="vertical">
+
+    <com.marco.www.mymvprxjaveretrofit_master.common.AutoLoadRecylerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </com.marco.www.mymvprxjaveretrofit_master.common.AutoLoadRecylerView>
+
+    <include layout="@layout/common_error"/>
+
+</android.support.v4.widget.SwipeRefreshLayout>
