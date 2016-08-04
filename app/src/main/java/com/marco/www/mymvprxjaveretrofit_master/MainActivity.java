@@ -40,30 +40,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         viewpager = (ViewPager) findViewById(R.id.fragent_content);
         toolbar.setTitle("Marco -- 想要随时给");
-//        toolbar.inflateMenu(R.menu.base_toolbar_menu);
-//        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener()
-//        {
-//            @Override
-//            public boolean onMenuItemClick(MenuItem item)
-//            {
-//                int menuItemId = item.getItemId();
-//                if (menuItemId == R.id.action_search) {
-//                    Toast.makeText(MainActivity.this, R.string.menu_search, Toast.LENGTH_SHORT).show();
-//
-//                } else if (menuItemId == R.id.action_notification) {
-//                    Toast.makeText(MainActivity.this, R.string.menu_notifications, Toast.LENGTH_SHORT).show();
-//
-//                } else if (menuItemId == R.id.action_item1) {
-//                    Toast.makeText(MainActivity.this, R.string.menu_settings, Toast.LENGTH_SHORT).show();
-//
-//                } else if (menuItemId == R.id.action_item2) {
-//                    Toast.makeText(MainActivity.this, R.string.menu_about_us, Toast.LENGTH_SHORT).show();
-//                }
-//                return true;
-//            }
-//        });
-//        setSupportActionBar(toolbar);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        toggle.setDrawerIndicatorEnabled(false);
+        toggle.setHomeAsUpIndicator(R.drawable.ic_home);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
         navView.setNavigationItemSelectedListener(this);

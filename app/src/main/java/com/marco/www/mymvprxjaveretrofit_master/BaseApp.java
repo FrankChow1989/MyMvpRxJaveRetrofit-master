@@ -1,6 +1,8 @@
 package com.marco.www.mymvprxjaveretrofit_master;
 
 import android.app.Application;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 /**
  * Created by JDD on 2016/4/8.
