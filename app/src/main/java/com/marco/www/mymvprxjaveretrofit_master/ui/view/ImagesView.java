@@ -10,7 +10,5 @@ import java.util.List;
  */
 public interface ImagesView extends MvpView
 {
-    void refresh(List<Images> data);
-
-    void loadMore(List<Images> data);
+    void receiveImageList(List<Images> imageListDomains);
 }
