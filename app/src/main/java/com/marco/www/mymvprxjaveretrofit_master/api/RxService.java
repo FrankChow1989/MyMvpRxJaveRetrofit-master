@@ -1,7 +1,5 @@
 package com.marco.www.mymvprxjaveretrofit_master.api;
 
-import com.marco.www.mymvprxjaveretrofit_master.util.Constants;
-
 import okhttp3.OkHttpClient;
 import retrofit2.CallAdapter;
 import retrofit2.Converter;

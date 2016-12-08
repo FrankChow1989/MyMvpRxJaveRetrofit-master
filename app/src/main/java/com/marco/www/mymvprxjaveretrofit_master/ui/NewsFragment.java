@@ -1,10 +1,13 @@
 package com.marco.www.mymvprxjaveretrofit_master.ui;
 
+import android.app.Dialog;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.marco.www.mymvprxjaveretrofit_master.BaseFragment;
 import com.marco.www.mymvprxjaveretrofit_master.R;
@@ -35,31 +38,7 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     private RelativeLayout commonError;
     private Button bt_retry;
 
-    @Override
-    public void onRefresh()
-    {
-        page = 1;
-        loadData();
-    }
-
-    @Override
-    public void refresh(List<ContentlistEntity> data)
-    {
-        commonError.setVisibility(View.GONE);
-        jokeList.clear();
-        jokeList.addAll(data);
-        jokeAdapter.notifyDataSetChanged();
-        swipeRe.setRefreshing(false);
-    }
-
-    @Override
-    public void loadMore(List<ContentlistEntity> data)
-    {
-        commonError.setVisibility(View.GONE);
-        jokeList.addAll(data);
-        jokeAdapter.notifyDataSetChanged();
-        relativeLayout.setLoading(false);
-    }
+    Dialog mDialog;
 
     @Override
     protected int getLayoutResource()
@@ -70,24 +49,10 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     @Override
     protected void initData()
     {
-        initDatas();
-        loadData();
-
-    }
-
-    private void loadData()
-    {
-        jokePresenter.loadList(page);
-        page++;
-    }
-
-    private void initDatas()
-    {
         jokeList = new ArrayList<>();
-        jokeAdapter = new JokeAdapter(jokeList);
-        relativeLayout.setAdapter(jokeAdapter);
-        jokePresenter = new JokePresenter();
+        jokePresenter = new JokePresenter(this);
         jokePresenter.attachView(this);
+        jokePresenter.startGetPicList(page);
     }
 
     @Override
@@ -97,7 +62,6 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
         relativeLayout = (AutoLoadRecylerView) context.findViewById(R.id.recycler_view);
         commonError = (RelativeLayout) context.findViewById(R.id.common_error);
         bt_retry = (Button) context.findViewById(R.id.retry_btn);
-
         bt_retry.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -106,18 +70,34 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                 onRefresh();
             }
         });
-
         swipeRe.setOnRefreshListener(this);
-        layoutManager = new LinearLayoutManager(context);
-        relativeLayout.setLayoutManager(layoutManager);
-        relativeLayout.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL_LIST));
-        relativeLayout.setLoadMoreListener(this);
+    }
+
+    @Override
+    public void showLoading(String msg)
+    {
+//        mDialog = new Dialog(context);
+//        mDialog.setContentView(R.layout.loading);
+//        mDialog.show();
+    }
+
+    @Override
+    public void hideLoading()
+    {
+        //mDialog.dismiss();
+    }
+
+    @Override
+    public void onRefresh()
+    {
+        page = 1;
+        jokePresenter.startGetPicList(page);
     }
 
     @Override
     public void onLoadMore()
     {
-        loadData();
+        jokePresenter.startGetPicList(page);
     }
 
     @Override
@@ -125,5 +105,21 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     {
         super.onDestroy();
         jokePresenter.detachView();
+    }
+
+    @Override
+    public void receivePicList(List<ContentlistEntity> imageListDomains)
+    {
+        if (null == imageListDomains || imageListDomains.size() == 0) {
+            Toast.makeText(context, "没有发现更多数据", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        jokeList = imageListDomains;
+        layoutManager = new LinearLayoutManager(context);
+        relativeLayout.setLayoutManager(layoutManager);
+        relativeLayout.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL_LIST));
+        relativeLayout.setLoadMoreListener(this);
+        jokeAdapter = new JokeAdapter(jokeList);
+        relativeLayout.setAdapter(jokeAdapter);
     }
 }

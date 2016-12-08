@@ -1,11 +1,17 @@
 package com.marco.www.mymvprxjaveretrofit_master.presenter;
 
 import android.util.Log;
+import android.view.View;
 
 import com.marco.www.mymvprxjaveretrofit_master.api.JokeApi;
 import com.marco.www.mymvprxjaveretrofit_master.api.RxService;
 import com.marco.www.mymvprxjaveretrofit_master.domain.ContentlistEntity;
+import com.marco.www.mymvprxjaveretrofit_master.domain.Images;
 import com.marco.www.mymvprxjaveretrofit_master.domain.JokeEntity;
+import com.marco.www.mymvprxjaveretrofit_master.model.ImageListModelImpl;
+import com.marco.www.mymvprxjaveretrofit_master.model.PicListModel;
+import com.marco.www.mymvprxjaveretrofit_master.model.PicListModelImpl;
+import com.marco.www.mymvprxjaveretrofit_master.ui.view.ImagesView;
 import com.marco.www.mymvprxjaveretrofit_master.ui.view.PicView;
 
 import java.util.List;
@@ -18,55 +24,48 @@ import rx.schedulers.Schedulers;
 /**
  * Created by JDD on 2016/4/21 0021.
  */
-public class JokePresenter extends BasePresenter<PicView> {
+public class JokePresenter implements PresenterPic<PicView>, PicListModelImpl.GetPicListenter
+{
+
+    PicView picView;
+    PicListModel picListModel;
+
+    public JokePresenter(PicView picView)
+    {
+        this.picView = picView;
+        this.picListModel = new PicListModelImpl();
+    }
+
 
     @Override
-    public void attachView(PicView mvpView) {
-        super.attachView(mvpView);
+    public void startGetPicList(int page)
+    {
+        picView.showLoading("请稍后...");
+        picListModel.GetPicList(page, this);
     }
 
     @Override
-    public void detachView() {
-        super.detachView();
+    public void onSuccess(List<ContentlistEntity> picList)
+    {
+        picView.receivePicList(picList);
+        picView.hideLoading();
     }
 
-    public void loadList(final int page) {
-        RxService.getJokeApi().getJoke(page)
-                .subscribeOn(Schedulers.io())//在非UI线程中获取数据
-                .map(new Func1<JokeEntity, List<ContentlistEntity>>() {
-                    @Override
-                    public List<ContentlistEntity> call(JokeEntity jokeEntity) {
+    @Override
+    public void OnError(Exception e)
+    {
 
-                        for (ContentlistEntity c:jokeEntity.getShowapi_res_body().getContentlist()) {
-                            Log.d("TAG",c.getTitle()+","+c.getText());
-                        }
-
-                        return jokeEntity.getShowapi_res_body().getContentlist();
-                    }
-                })
-                .observeOn(AndroidSchedulers.mainThread())//在UI线程中执行更新UI
-                .subscribe(new Observer<List<ContentlistEntity>>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        getMvpView().showError(null, null);
-                    }
-
-                    @Override
-                    public void onNext(List<ContentlistEntity> contentlistEntities) {
-                        if (page == 1) {
-                            getMvpView().refresh(contentlistEntities);
-                        } else {
-                            getMvpView().loadMore(contentlistEntities);
-                        }
-                    }
-                });
     }
 
+    @Override
+    public void attachView(PicView mvpView)
+    {
 
+    }
 
+    @Override
+    public void detachView()
+    {
+
+    }
 }

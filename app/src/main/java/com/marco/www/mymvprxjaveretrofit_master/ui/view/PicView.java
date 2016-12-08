@@ -1,6 +1,8 @@
 package com.marco.www.mymvprxjaveretrofit_master.ui.view;
 
 import com.marco.www.mymvprxjaveretrofit_master.domain.ContentlistEntity;
+import com.marco.www.mymvprxjaveretrofit_master.domain.Images;
+import com.marco.www.mymvprxjaveretrofit_master.domain.JokeEntity;
 
 import java.util.List;
 
@@ -9,7 +11,5 @@ import java.util.List;
  */
 public interface PicView extends MvpView
 {
-    void refresh(List<ContentlistEntity> data);
-
-    void loadMore(List<ContentlistEntity> data);
+    void receivePicList(List<ContentlistEntity> imageListDomains);
 }

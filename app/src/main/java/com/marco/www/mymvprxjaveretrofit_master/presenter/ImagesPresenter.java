@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by pc on 2016/6/23.
  */
-public class ImagesPresenter implements Presenter<ImagesView>, ImageListModelImpl.GetImageListenter
+public class ImagesPresenter implements PresenterImage<ImagesView>, ImageListModelImpl.GetImageListenter
 {
 
     private ImagesView imagesView;

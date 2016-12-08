@@ -21,7 +21,7 @@ import com.marco.www.mymvprxjaveretrofit_master.ui.NewsFragment;
 import com.marco.www.mymvprxjaveretrofit_master.util.Constants;
 
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
+public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener
 {
 
     Toolbar toolbar;
@@ -30,15 +30,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     MainPagerAdapter mMainPagerAdapter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
+    protected int getLayoutResource()
     {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        return R.layout.activity_main;
+    }
+
+    @Override
+    protected void initData()
+    {
+        tabLayout.setTabTextColors(getResources().getColor(R.color.whiteTrans80), getResources().getColor(R.color.white));
+        viewpager.setAdapter(mMainPagerAdapter = new MainPagerAdapter(getSupportFragmentManager()));
+        tabLayout.setupWithViewPager(viewpager);
+    }
+
+    @Override
+    protected void initView()
+    {
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         NavigationView navView = (NavigationView) findViewById(R.id.nav_view);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         viewpager = (ViewPager) findViewById(R.id.fragent_content);
+
         toolbar.setTitle("Marco -- 想要随时给");
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         toggle.setDrawerIndicatorEnabled(false);
@@ -47,10 +60,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
         navView.setNavigationItemSelectedListener(this);
         navView.setCheckedItem(R.id.nav_new);
-
-        tabLayout.setTabTextColors(getResources().getColor(R.color.whiteTrans80), getResources().getColor(R.color.white));
-        viewpager.setAdapter(mMainPagerAdapter = new MainPagerAdapter(getSupportFragmentManager()));
-        tabLayout.setupWithViewPager(viewpager);
     }
 
     public class MainPagerAdapter extends FragmentStatePagerAdapter

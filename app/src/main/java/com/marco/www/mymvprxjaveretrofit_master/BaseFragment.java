@@ -50,7 +50,6 @@ public abstract class BaseFragment extends Fragment implements MvpView
     public void onDestroy() {
         super.onDestroy();
     }
-
     public void onResume() {
         super.onResume();
     }
